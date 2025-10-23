@@ -1,0 +1,50 @@
+#set working directory
+setwd("/cloud/project")
+
+--------------------------------------------------------------
+#Load Dataset
+
+#install.packages("readr")
+library(readr)
+
+TextMessages <- read_csv("TextMessages (1).csv")
+
+#View 5 observations
+head(TextMessages, n=5)
+
+#View variable names
+names(TextMessages)
+
+
+
+# Step 2: Get Descriptive Stats
+
+#install.packages("dplyr")   #run once if not already installed
+library(dplyr)
+
+#summarize  messages by group + time
+summary_stats <- TextMessages %>%
+  group_by(Group, Time) %>%
+  summarise(
+    Mean_Texts = mean(TextMessages, na.rm = TRUE),
+    SD_Texts = sd(TextMessages, na.rm = TRUE),
+    Median_Texts = median(TextMessages, na.rm = TRUE),
+    Count = n()
+  )
+
+#print summary stats
+summary_stats
+
+
+
+#--------------------------------------------------------------
+## Step 3: Save Summary Statistics to Output File
+#--------------------------------------------------------------
+
+write.csv(summary_stats, "SummaryStats_TextMessages.csv", row.names = FALSE)
+
+
+# The summary table shows how avg text message counts 
+# differ over groups and time. The standard 
+# deviation measures variability, and the count verifies 
+# the number of participants per category.
